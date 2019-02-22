@@ -1,16 +1,14 @@
 from pyforms.basewidget import BaseWidget
-from pyforms.controls   import ControlFile
 from pyforms.controls   import ControlText
 from pyforms.controls   import ControlSlider
-from pyforms.controls   import ControlPlayer
 from pyforms.controls   import ControlButton
 from pyforms.controls   import ControlLabel
 from pyforms.controls   import ControlCheckBox
 from pyforms            import start_app
 from threading          import Thread
-from letturaSito        import read
-from sendMail           import sendMessage
-from sendMail           import sign
+from read_pages         import read
+from notification       import sendMessage
+from notification       import sign
 import time
 import datetime
 import sys
@@ -27,7 +25,7 @@ class MyGui(BaseWidget):
         self._checkbox          = ControlCheckBox("notification")
         self._period            = ControlSlider('Period', default=10, minimum=1, maximum=360)
         self._runbutton         = ControlButton('Run')
-        self._state_labe        = ControlLabel("In Attesa Dell'Url")
+        self._state_labe        = ControlLabel("waiting")
         self._runbutton.value   = self.__runEvent
         self._state             = 0
 
@@ -51,7 +49,7 @@ class MyGui(BaseWidget):
             if(os.path.exists(os.environ["HOME"]+"/.notifyreg")):
                 return True
             else:
-                self.success("Devi inserire il token per potere avere le notifiche", title=None)
+                self.success("you must insert the token to have notifications", title=None)
                 return False
         else:
             if(os.path.exists(os.environ["HOME"]+"/.notifyreg")):
