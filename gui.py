@@ -6,6 +6,8 @@ from threading          import Thread
 from read_pages         import read
 from notification       import send_message
 from notification       import sign
+from menu               import Menu
+
 import time
 import datetime
 import sys
@@ -20,15 +22,20 @@ class MainWindow(QtGui.QMainWindow):
 
         self.setWindowTitle('Changes In Web Pages')
         self.resize(600, 250)
+        self.setWindowIcon(QtGui.QIcon('media/logo.png'))
         
         cWidget = QtGui.QWidget(self)
 
+        #menu
+        menu_action = QtGui.QAction("Threads", self)
+        menu_action.setShortcut("Ctrl+M")
+        menu_action.triggered.connect(self._show_menu)
+
+        menu = self.menuBar().addMenu('Menu')
+        menu.addAction(menu_action)
+
         #grid
         grid = QtGui.QGridLayout(cWidget)
-
-        grid.setRowStretch(0, 3)
-        grid.setRowStretch(1, 10)
-        grid.setRowStretch(2, 3)
 
         #labels
         self._labelurl = QtGui.QLabel("Url", cWidget)
@@ -74,6 +81,11 @@ class MainWindow(QtGui.QMainWindow):
 
         cWidget.setLayout(grid)
         self.setCentralWidget(cWidget)
+
+
+    def _show_menu(self):
+        self._menu_gui = Menu(self)
+        self._menu_gui.show()
 
     def _change_in_slider(self):
         size = self._mins.value()
