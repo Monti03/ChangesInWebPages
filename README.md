@@ -4,9 +4,9 @@ you can controll changes in web pages and get a notification on your android pho
 
 <H2>Installation and requirements</H2>
 
-  ```pip3 install pyforms``` 
+  ```sudo apt-get install python3-pyqt4``` 
 
-  ```pip3 install BeautifulSoup4```
+  ```pip3 install BeautifulSoup4``` or ````pip3 install beautifulsoup4```` or ```pip3 install bs4```
 
   ```pip install lxml```
 
@@ -27,4 +27,4 @@ you can controll changes in web pages and get a notification on your android pho
   
   notification  -> check if you whant to have the notification on the phone
   
-  Period        -> inspection period (minutes)
+  Slider        -> inspection period (minutes)
