@@ -1,96 +1,149 @@
-from pyforms.basewidget import BaseWidget
-from pyforms.controls   import ControlText
-from pyforms.controls   import ControlSlider
-from pyforms.controls   import ControlButton
-from pyforms.controls   import ControlLabel
-from pyforms.controls   import ControlCheckBox
-from pyforms            import start_app
+#!/usr/bin/python
+
+from PyQt4              import QtGui, QtCore
+
 from threading          import Thread
 from read_pages         import read
-from notification       import sendMessage
+from notification       import send_message
 from notification       import sign
 import time
 import datetime
 import sys
 import os
 
-class MyGui(BaseWidget):
+class MainWindow(QtGui.QMainWindow):
+    def __init__(self):
+        QtGui.QMainWindow.__init__(self)
 
-    def __init__(self, *args, **kwargs):
-        super().__init__('WebPageChange')
+        self._inrunning = 0
+        self._running_threads = []
 
+        self.setWindowTitle('Changes In Web Pages')
+        self.resize(600, 250)
         
-        self._url               = ControlText('Url')
-        self._notifyToken       = ControlText('NotifyToken')
-        self._checkbox          = ControlCheckBox("notification")
-        self._period            = ControlSlider('Period', default=10, minimum=1, maximum=360)
-        self._runbutton         = ControlButton('Run')
-        self._state_labe        = ControlLabel("waiting")
-        self._runbutton.value   = self.__runEvent
-        self._state             = 0
+        cWidget = QtGui.QWidget(self)
 
-        self._formset = [
-            ('_url'),
-            ('_notifyToken','_checkbox'),
-            ('_period', '_runbutton'),
-            ('_state_labe')
-        ]
+        #grid
+        grid = QtGui.QGridLayout(cWidget)
 
-    def __runEvent(self):
-        if(self._state == 0 and self._url.value != '' and self.__controllNotification()):
-            self.th = ControllThread(self._url.value, self._period.value, self)
-            self.th.start()
-            self._state_labe.value = "Scansionando"
-            self._state = 1
+        grid.setRowStretch(0, 3)
+        grid.setRowStretch(1, 10)
+        grid.setRowStretch(2, 3)
+
+        #labels
+        self._labelurl = QtGui.QLabel("Url", cWidget)
+        self._labelnotify = QtGui.QLabel("Notify Token", cWidget)
+        self._show_mins = QtGui.QLabel("Minutes:10", cWidget)
+
+        #texts
+        self._url = QtGui.QLineEdit(self)
+        self._url.resize(500,20)
+        self._notify_token =  QtGui.QLineEdit(self)
+
+        #check box
+        self._check_box = QtGui.QCheckBox("Notification", cWidget)
+        self._check_box.setChecked(True)
+
+        #start button
+        self._start_button = QtGui.QPushButton("Toggle button")
+        self._start_button.setCheckable(True)
+
+        self.connect(self._start_button, QtCore.SIGNAL('clicked()'), self._start)
+
+        #slider
+        self._mins = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self._mins.setMinimum(1)
+        self._mins.setMaximum(360)
+        self._mins.setValue(10)
+        self._mins.setTickPosition(QtGui.QSlider.TicksBelow)
+        self._mins.setTickInterval(10)
+        
+        self._mins.valueChanged.connect(self._change_in_slider)
+
+        grid.addWidget(self._labelurl,     0, 0)
+        grid.addWidget(self._labelnotify,  1, 0)
+
+        grid.addWidget(self._url,          0, 1)
+        grid.addWidget(self._notify_token, 1, 1)
+        grid.addWidget(self._check_box,    1, 2)        
+
+        grid.addWidget(self._mins,         2, 1)
+        grid.addWidget(self._start_button, 2, 2)
+
+        grid.addWidget(self._show_mins, 2, 0)
+
+        cWidget.setLayout(grid)
+        self.setCentralWidget(cWidget)
+
+    def _change_in_slider(self):
+        size = self._mins.value()
+        self._show_mins.setText("Minutes:{}".format(size))
+
+
+    def _start(self):
+        if(self._url.text() != '' and self._controll()):
+            th = ControllThread(self._url.text(), self._mins.value(), self._check_box.isChecked(), self)
+            th.changed.connect(self._on_change)
+            th.start()
+            print(self._url.text())
+            self._running_threads.append(th)
+            self._inrunning += 1
+            #self._state_in_run.value = "in running:{}".format(self._inrunning)
     
-    def __controllNotification(self):
-        if(self._notifyToken.value == '' and self._checkbox.value):
+    def _on_change(self, url):
+        QtGui.QMessageBox.information(self, 'Has changed!',"this url:{} has changed".format(self._url.text()))
+
+    def _controll(self):
+        if(not self._check_box.isChecked()):
+            return True
+
+        if(self._notify_token.text() == '' and self._check_box.isChecked()):
             print(os.environ["HOME"])
             if(os.path.exists(os.environ["HOME"]+"/.notifyreg")):
                 return True
             else:
-                self.success("you must insert the token to have notifications", title=None)
+                QtGui.QMessageBox.information(self, 'Problem!',"if you whant notification on the phone you must set notification token")
                 return False
         else:
             if(os.path.exists(os.environ["HOME"]+"/.notifyreg")):
                 return True
             else:
-                sign(self._notifyToken.value)
+                sign(self._notify_token.text())
                 return True
-                
-    def __CloseAction(self):
-        sys.exit()
 
-class ControllThread(Thread):
+class ControllThread(QtCore.QThread):
+
+    changed = QtCore.pyqtSignal(object)
  
-    def __init__(self,url,mins,my_gui):
+    def __init__(self,url,mins,check_box_value,my_gui):
         ''' Constructor. '''
-        Thread.__init__(self)
+        QtCore.QThread.__init__(self)
         self._mins   = mins
         self._url    = url 
         self._my_gui = my_gui
+        self._check_box_value = check_box_value
         self._flag   = True
+        self._last_check = 0
  
     def run(self):
-               
+        
         text = read(self._url)
-        print("ok")
         condition = True
         i = 0
         while(condition and self._flag):
             time.sleep(self._mins*60)
             condition = text == read(self._url)
-            #print(datetime.datetime.now())
-            self._my_gui._state_labe.value = time.strftime("%H:%M:%S",time.gmtime())
+            self._last_check = time.strftime("%H:%M:%S",time.gmtime())
 
-        if(self._my_gui._checkbox.value):
-            sendMessage(self._url)
-        self._my_gui.success("cambiamento", title=None)
+        if(self._check_box_value):
+            send_message(self._url)
+        self.changed.emit('%s\n' % (self._url))
 
     def stop(self):
         self._flag = False
 
 
-
-if __name__ == '__main__':
-    w = start_app(MyGui, geometry=(100, 100, 400, 100))
+app = QtGui.QApplication(sys.argv)
+main = MainWindow()
+main.show()
+sys.exit(app.exec_())
