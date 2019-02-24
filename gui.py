@@ -7,18 +7,17 @@ from read_pages         import read
 from notification       import send_message
 from notification       import sign
 from menu               import Menu
+from menu               import running_threads
 
 import time
 import datetime
 import sys
 import os
 
+
 class MainWindow(QtGui.QMainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
-
-        self._inrunning = 0
-        self._running_threads = []
 
         self.setWindowTitle('Changes In Web Pages')
         self.resize(600, 250)
@@ -80,11 +79,11 @@ class MainWindow(QtGui.QMainWindow):
         grid.addWidget(self._show_mins, 2, 0)
 
         cWidget.setLayout(grid)
-        self.setCentralWidget(cWidget)
+        self.setCentralWidget(cWidget)    
 
 
     def _show_menu(self):
-        self._menu_gui = Menu(self)
+        self._menu_gui = Menu()
         self._menu_gui.show()
 
     def _change_in_slider(self):
@@ -97,9 +96,8 @@ class MainWindow(QtGui.QMainWindow):
             th = ControllThread(self._url.text(), self._mins.value(), self._check_box.isChecked(), self)
             th.changed.connect(self._on_change)
             th.start()
-            print(self._url.text())
-            self._running_threads.append(th)
-            self._inrunning += 1
+            running_threads.append(th)
+            
             #self._state_in_run.value = "in running:{}".format(self._inrunning)
     
     def _on_change(self, url):
@@ -126,7 +124,8 @@ class MainWindow(QtGui.QMainWindow):
 class ControllThread(QtCore.QThread):
 
     changed = QtCore.pyqtSignal(object)
- 
+    update_gui = QtCore.pyqtSignal(object)
+    
     def __init__(self,url,mins,check_box_value,my_gui):
         ''' Constructor. '''
         QtCore.QThread.__init__(self)
@@ -143,19 +142,26 @@ class ControllThread(QtCore.QThread):
         condition = True
         i = 0
         while(condition and self._flag):
-            time.sleep(self._mins*60)
+            time.sleep(self._mins)#*60)
             condition = text == read(self._url)
             self._last_check = time.strftime("%H:%M:%S",time.gmtime())
+
+            self.update_gui.emit('ciao\n' % ())
 
         if(self._check_box_value):
             send_message(self._url)
         self.changed.emit('%s\n' % (self._url))
+        
+        if(self in self._my_gui._running_threads):
+            self._my_gui._running_threads.remove(self)
 
     def stop(self):
         self._flag = False
+        if(self in self._my_gui._running_threads):
+            self._my_gui._running_threads.remove(self)
 
-
-app = QtGui.QApplication(sys.argv)
-main = MainWindow()
-main.show()
-sys.exit(app.exec_())
+if __name__ == "__main__":
+    app = QtGui.QApplication(sys.argv)
+    main = MainWindow()
+    main.show()
+    sys.exit(app.exec_())
