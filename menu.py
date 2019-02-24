@@ -22,12 +22,12 @@ class Menu(QtGui.QMainWindow):
         grid.addWidget(time,    0, 1)
         grid.addWidget(last,    0, 2)
 
-
-        ths = running_threads
-        #print("menu->"+str(ths))
         i = 1
-        for t in ths:
-            t.update_gui.connect(self._update_gui)
+        for tpl in running_threads:
+            t = tpl[0]
+            if(not tpl[1]):
+                t.update_gui.connect(self._update_gui)
+                tpl[1] = True
 
             url = QtGui.QLabel(t._url, cWidget)
             time = QtGui.QLabel(str(t._mins), cWidget)
@@ -57,7 +57,13 @@ class Menu(QtGui.QMainWindow):
         new_grid.addWidget(last,    0, 2)
 
         i = 1
-        for t in running_threads:
+        for tpl in running_threads:
+            t = tpl[0]
+
+            if(not tpl[1]):
+                t.update_gui.connect(self._update_gui)
+                tpl[1] = True
+
             url = QtGui.QLabel(t._url, cWidget)
             time = QtGui.QLabel(str(t._mins), cWidget)
             last = QtGui.QLabel(str(t._last_check), cWidget)

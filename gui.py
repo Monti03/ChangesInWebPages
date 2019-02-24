@@ -96,9 +96,8 @@ class MainWindow(QtGui.QMainWindow):
             th = ControllThread(self._url.text(), self._mins.value(), self._check_box.isChecked(), self)
             th.changed.connect(self._on_change)
             th.start()
-            running_threads.append(th)
+            running_threads.append([th, False])
             
-            #self._state_in_run.value = "in running:{}".format(self._inrunning)
     
     def _on_change(self, url):
         QtGui.QMessageBox.information(self, 'Has changed!',"this url:{} has changed".format(self._url.text()))
@@ -142,7 +141,7 @@ class ControllThread(QtCore.QThread):
         condition = True
         i = 0
         while(condition and self._flag):
-            time.sleep(self._mins)#*60)
+            time.sleep(self._mins*60)
             condition = text == read(self._url)
             self._last_check = time.strftime("%H:%M:%S",time.gmtime())
 
@@ -152,13 +151,12 @@ class ControllThread(QtCore.QThread):
             send_message(self._url)
         self.changed.emit('%s\n' % (self._url))
         
-        if(self in self._my_gui._running_threads):
-            self._my_gui._running_threads.remove(self)
+        
+        running_threads.remove((self,True))
 
     def stop(self):
         self._flag = False
-        if(self in self._my_gui._running_threads):
-            self._my_gui._running_threads.remove(self)
+        running_threads.remove((self,True))
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
