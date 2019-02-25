@@ -14,8 +14,12 @@ import datetime
 import sys
 import os
 
+START_NOTIFICATION = "Now I'm controlling {} each {} minutes.\nIf you whant to stop it go to Menu->Thread or CTRL+M"
 
 class MainWindow(QtGui.QMainWindow):
+
+    main_gui_notification_to_menu = QtCore.pyqtSignal(object)
+
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
 
@@ -39,7 +43,7 @@ class MainWindow(QtGui.QMainWindow):
         #labels
         self._labelurl = QtGui.QLabel("Url", cWidget)
         self._labelnotify = QtGui.QLabel("Notify Token", cWidget)
-        self._show_mins = QtGui.QLabel("Minutes:10", cWidget)
+        self._show_mins = QtGui.QLabel("Minutes: 10", cWidget)
 
         #texts
         self._url = QtGui.QLineEdit(self)
@@ -51,10 +55,8 @@ class MainWindow(QtGui.QMainWindow):
         self._check_box.setChecked(True)
 
         #start button
-        self._start_button = QtGui.QPushButton("Toggle button")
-        self._start_button.setCheckable(True)
-
-        self.connect(self._start_button, QtCore.SIGNAL('clicked()'), self._start)
+        self._start_button = QtGui.QPushButton("Start", self)
+        self._start_button.clicked.connect(self._start)
 
         #slider
         self._mins = QtGui.QSlider(QtCore.Qt.Horizontal)
@@ -81,14 +83,15 @@ class MainWindow(QtGui.QMainWindow):
         cWidget.setLayout(grid)
         self.setCentralWidget(cWidget)    
 
+        self._menu_gui = Menu(self)
 
     def _show_menu(self):
-        self._menu_gui = Menu()
+        self.main_gui_notification_to_menu.emit('-\n' % ())
         self._menu_gui.show()
 
     def _change_in_slider(self):
         size = self._mins.value()
-        self._show_mins.setText("Minutes:{}".format(size))
+        self._show_mins.setText("Minutes: {}".format(size))
 
 
     def _start(self):
@@ -97,6 +100,8 @@ class MainWindow(QtGui.QMainWindow):
             th.changed.connect(self._on_change)
             th.start()
             running_threads.append([th, False])
+            self._url.setText("")
+            QtGui.QMessageBox.information(self, "Started" ,START_NOTIFICATION.format(self._url.text(), str(self._mins.value())))
             
     
     def _on_change(self, url):
@@ -133,30 +138,46 @@ class ControllThread(QtCore.QThread):
         self._my_gui = my_gui
         self._check_box_value = check_box_value
         self._flag   = True
-        self._last_check = 0
+        self._last_check = time.strftime("%H:%M:%S",time.gmtime())
  
     def run(self):
         
         text = read(self._url)
         condition = True
         i = 0
-        while(condition and self._flag):
-            time.sleep(self._mins*60)
+        while(condition):
             condition = text == read(self._url)
+            if(not condition):
+                break
+            time.sleep(self._mins*60)
+            if(not self._flag):
+                return
             self._last_check = time.strftime("%H:%M:%S",time.gmtime())
 
-            self.update_gui.emit('ciao\n' % ())
+            self.update_gui.emit('-\n' % ())
 
-        if(self._check_box_value):
+        if(self._check_box_value and self._flag):
             send_message(self._url)
-        self.changed.emit('%s\n' % (self._url))
-        
-        
-        running_threads.remove((self,True))
 
+        if(self._flag):
+            self.changed.emit('%s\n' % (self._url))
+            if([self,True] in running_threads):
+                running_threads.remove([self,True])
+            else:
+                running_threads.remove([self,False])
+        
+        self.update_gui.emit('-\n' % ())
+                
+            
     def stop(self):
         self._flag = False
-        running_threads.remove((self,True))
+
+        if([self,True] in running_threads):
+            running_threads.remove([self,True])
+        elif [self,False] in running_threads:
+            running_threads.remove([self,False])
+
+        self.update_gui.emit('-\n' % ())
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)

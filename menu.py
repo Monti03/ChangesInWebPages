@@ -1,14 +1,15 @@
 from PyQt4              import QtGui, QtCore
 
 running_threads = []
-
 class Menu(QtGui.QMainWindow):
-    def __init__(self):
+    def __init__(self, gui):
         QtGui.QMainWindow.__init__(self)
 
         self.setWindowTitle('Threads')
         self.resize(400, 100)
         self.setWindowIcon(QtGui.QIcon('media/logo.png'))
+
+        gui.main_gui_notification_to_menu.connect(self._update_gui)
 
         cWidget = QtGui.QWidget(self)
 
@@ -33,15 +34,24 @@ class Menu(QtGui.QMainWindow):
             time = QtGui.QLabel(str(t._mins), cWidget)
             last = QtGui.QLabel(str(t._last_check), cWidget)
 
+            button = QtGui.QPushButton("STOP", self)
+            button.clicked.connect(self._make_pressed(t))
+
             grid.addWidget(url,     i, 0)
             grid.addWidget(time,    i, 1)
             grid.addWidget(last,    i, 2)
+            grid.addWidget(button,  i, 3)
 
             i+=1
         
         cWidget.setLayout(grid)
         self.setCentralWidget(cWidget)
     
+    def _make_pressed(self, t):
+        def pressed():
+            t.stop()
+        return pressed
+
     def _update_gui(self):
         print("Update Menu Gui")
         cWidget = QtGui.QWidget(self)
@@ -51,6 +61,7 @@ class Menu(QtGui.QMainWindow):
         url = QtGui.QLabel("urls", cWidget)
         time = QtGui.QLabel("mins", cWidget)
         last = QtGui.QLabel("last check", cWidget)
+        
 
         new_grid.addWidget(url,     0, 0)
         new_grid.addWidget(time,    0, 1)
@@ -67,12 +78,16 @@ class Menu(QtGui.QMainWindow):
             url = QtGui.QLabel(t._url, cWidget)
             time = QtGui.QLabel(str(t._mins), cWidget)
             last = QtGui.QLabel(str(t._last_check), cWidget)
+            button = QtGui.QPushButton("STOP", self)
+            button.clicked.connect(self._make_pressed(t))
 
             new_grid.addWidget(url,     i, 0)
             new_grid.addWidget(time,    i, 1)
             new_grid.addWidget(last,    i, 2)
+            new_grid.addWidget(button,  i, 3)
 
-            i   += 1
+
+            i += 1
 
         cWidget.setLayout(new_grid)
         self.setCentralWidget(cWidget)
