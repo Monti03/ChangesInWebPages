@@ -8,21 +8,25 @@ class Menu(QtGui.QMainWindow):
         self.setWindowTitle('Threads')
         self.resize(400, 100)
         self.setWindowIcon(QtGui.QIcon('media/logo.png'))
-
+        
+        #on this object will arrive notification from main gui
         gui.main_gui_notification_to_menu.connect(self._update_gui)
 
         cWidget = QtGui.QWidget(self)
 
         grid = QtGui.QGridLayout(cWidget)
 
+        #labels
         url = QtGui.QLabel("urls",cWidget)
         time = QtGui.QLabel("mins", cWidget)
         last = QtGui.QLabel("last check", cWidget)
 
+        #adding labels to the grid
         grid.addWidget(url,     0, 0)
         grid.addWidget(time,    0, 1)
         grid.addWidget(last,    0, 2)
 
+        #fill grid with threads values
         i = 1
         for tpl in running_threads:
             t = tpl[0]
@@ -47,11 +51,13 @@ class Menu(QtGui.QMainWindow):
         cWidget.setLayout(grid)
         self.setCentralWidget(cWidget)
     
+    #this function returns a function that associate button and thread
     def _make_pressed(self, t):
         def pressed():
             t.stop()
         return pressed
 
+    #update of the menu gui -> new thread or new last_check
     def _update_gui(self):
         print("Update Menu Gui")
         cWidget = QtGui.QWidget(self)
