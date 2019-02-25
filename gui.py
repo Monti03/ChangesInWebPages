@@ -147,7 +147,7 @@ class ControllThread(QtCore.QThread):
         self._my_gui = my_gui
         self._check_box_value = check_box_value #if True -> the notification is also send to the phone
         self._flag   = True                     #if True the Thread has been not stopped from the Menu
-        self._last_check = time.strftime("%H:%M:%S",time.gmtime())
+        self._last_check = time.strftime("%H:%M:%S",time.localtime())
  
     def run(self):  
         text = read(self._url)
@@ -160,7 +160,7 @@ class ControllThread(QtCore.QThread):
             time.sleep(self._mins*60)
             if(not self._flag):
                 return
-            self._last_check = time.strftime("%H:%M:%S",time.gmtime())
+            self._last_check = time.strftime("%H:%M:%S",time.localtime())
 
             self.update_gui.emit('-\n' % ())    #menu gui update -> is updated _last_check
 
