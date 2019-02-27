@@ -4,6 +4,7 @@ from PyQt4              import QtGui, QtCore
 
 from threading          import Thread
 from read_pages         import read
+from read_pages         import check_url
 from notification       import send_message
 from notification       import sign
 from menu               import Menu
@@ -102,6 +103,11 @@ class MainWindow(QtGui.QMainWindow):
     #start a new thread that controls url
     def _start(self):
         if(self._url.text() != '' and self._controll()):
+
+            if(not check_url(self._url.text())):
+                QtGui.QMessageBox.information(self, 'Problem!',"The url you insert is not valid")
+                return
+            
             th = ControllThread(self._url.text(), self._mins.value(), self._check_box.isChecked(), self)
             th.changed.connect(self._on_change)
             th.start()

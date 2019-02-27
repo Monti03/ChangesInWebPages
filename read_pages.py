@@ -5,7 +5,7 @@ import datetime
 
 
 def read(url):
-
+    
     html = urllib.request.urlopen(url).read()
     soup = BeautifulSoup(html,features="lxml")
 
@@ -17,4 +17,10 @@ def read(url):
     text = soup.get_text()
     return text
 
-
+#returns false if the url is not valid else True
+def check_url(url):
+    try:    
+        html = urllib.request.urlopen(url).read()
+    except:
+        return False
+    return True
