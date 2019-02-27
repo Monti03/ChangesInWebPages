@@ -104,6 +104,11 @@ class MainWindow(QtGui.QMainWindow):
     def _start(self):
         if(self._url.text() != '' and self._controll()):
 
+            tmp_url = self._url.text()
+            if("http://" not in tmp_url):
+                self._url.setText("http://{}".format(tmp_url))
+
+            print(self._url.text())
             if(not check_url(self._url.text())):
                 QtGui.QMessageBox.information(self, 'Problem!',"The url you insert is not valid")
                 return
@@ -132,12 +137,9 @@ class MainWindow(QtGui.QMainWindow):
                 QtGui.QMessageBox.information(self, 'Problem!',"if you whant notification on the phone you must set notification token")
                 return False
         else:
-            if(os.path.exists(os.environ["HOME"]+"/.notifyreg")):
-                return True
-            else:
-                #registers user notify_token
-                sign(self._notify_token.text())
-                return True
+            #registers user notify_token
+            sign(self._notify_token.text())
+            return True
 
 #thread class that controls urls
 class ControllThread(QtCore.QThread):
