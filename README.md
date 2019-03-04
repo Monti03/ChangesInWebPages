@@ -1,25 +1,24 @@
+#ChangesInWebPages
 
-<H1>get a notification wen a web page changes</H1>
+##Get a notification wen a web page changes##
 you can controll changes in web pages and get a notification on your android phone via Notify: https://play.google.com/store/apps/details?id=com.kevinbedi.notify
 
-<H2>Installation and requirements</H2>
+##Installation and requirements##
+```bash
+  sudo apt-get install python3-pyqt4
 
-  ```sudo apt-get install python3-pyqt4``` 
+  pip3 install BeautifulSoup4 || pip3 install beautifulsoup4 || pip3 install bs4
 
-  ```pip3 install BeautifulSoup4``` or ````pip3 install beautifulsoup4```` or ```pip3 install bs4```
+  pip install lxml
 
-  ```pip install lxml```
+  npm install -g notify-cli
+```
 
-  ```npm install -g notify-cli```
-
-
-<H2>Usage</H2>
-
+##Usage##
   To start:
-
   ```python3 gui.py```
   
-  <H2>Gui</H2>
+  ##Gui##
   
   Url           -> insert here the url you're checking
   
