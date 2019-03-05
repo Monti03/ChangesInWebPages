@@ -1,9 +1,9 @@
-#ChangesInWebPages
+# ChangesInWebPages
 
-##Get a notification wen a web page changes##
+## Get a notification wen a web page changes
 you can controll changes in web pages and get a notification on your android phone via Notify: https://play.google.com/store/apps/details?id=com.kevinbedi.notify
 
-##Installation and requirements##
+## Installation and requirements
 ```bash
   sudo apt-get install python3-pyqt4
 
@@ -14,7 +14,7 @@ you can controll changes in web pages and get a notification on your android pho
   npm install -g notify-cli
 ```
 
-##Usage##
+## Usage
   To start:
   ```python3 gui.py```
   
