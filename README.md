@@ -1,6 +1,6 @@
 # ChangesInWebPages
 
-## Get a notification wen a web page changes
+## Get a notification when a web page changes
 you can controll changes in web pages and get a notification on your android phone via Notify: https://play.google.com/store/apps/details?id=com.kevinbedi.notify
 
 ## Installation and requirements
@@ -18,7 +18,7 @@ you can controll changes in web pages and get a notification on your android pho
   To start:
   ```python3 gui.py```
   
-  ##Gui##
+## Gui
   
   Url           -> insert here the url you're checking
   
