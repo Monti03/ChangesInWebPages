@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from PyQt4              import QtGui, QtCore
+from PyQt5              import QtGui, QtWidgets, QtCore
 
 from threading          import Thread
 from read_pages         import read
@@ -17,21 +17,21 @@ import os
 
 START_NOTIFICATION = "Now I'm controlling {} each {} minutes.\nIf you whant to stop it go to Menu->Thread or CTRL+M"
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     #to notify the menu gui of changes
     main_gui_notification_to_menu = QtCore.pyqtSignal(object)
 
     def __init__(self):
-        QtGui.QMainWindow.__init__(self)
+        QtWidgets.QMainWindow.__init__(self)
 
         self.setWindowTitle('Changes In Web Pages')
         self.resize(600, 250)
         self.setWindowIcon(QtGui.QIcon('media/logo.png'))
         
-        cWidget = QtGui.QWidget(self)
+        cWidget = QtWidgets.QWidget(self)
 
         #menu
-        menu_action = QtGui.QAction("Threads", self)
+        menu_action = QtWidgets.QAction("Threads", self)
         menu_action.setShortcut("Ctrl+M")
         menu_action.triggered.connect(self._show_menu)
 
@@ -39,32 +39,32 @@ class MainWindow(QtGui.QMainWindow):
         menu.addAction(menu_action)
 
         #grid
-        grid = QtGui.QGridLayout(cWidget)
+        grid = QtWidgets.QGridLayout(cWidget)
 
         #labels
-        self._labelurl = QtGui.QLabel("Url", cWidget)
-        self._labelnotify = QtGui.QLabel("Notify Token", cWidget)
-        self._show_mins = QtGui.QLabel("Minutes: 10", cWidget)
+        self._labelurl = QtWidgets.QLabel("Url", cWidget)
+        self._labelnotify = QtWidgets.QLabel("Notify Token", cWidget)
+        self._show_mins = QtWidgets.QLabel("Minutes: 10", cWidget)
 
         #texts
-        self._url = QtGui.QLineEdit(self)
+        self._url = QtWidgets.QLineEdit(self)
         self._url.resize(500,20)
-        self._notify_token =  QtGui.QLineEdit(self)
+        self._notify_token = QtWidgets.QLineEdit(self)
 
         #check box
-        self._check_box = QtGui.QCheckBox("Notification", cWidget)
+        self._check_box = QtWidgets.QCheckBox("Notification", cWidget)
         self._check_box.setChecked(True)
 
         #start button
-        self._start_button = QtGui.QPushButton("Start", self)
+        self._start_button = QtWidgets.QPushButton("Start", self)
         self._start_button.clicked.connect(self._start)
 
         #slider
-        self._mins = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self._mins = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self._mins.setMinimum(1)
         self._mins.setMaximum(360)
         self._mins.setValue(10)
-        self._mins.setTickPosition(QtGui.QSlider.TicksBelow)
+        self._mins.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self._mins.setTickInterval(10)
         
         self._mins.valueChanged.connect(self._change_in_slider)
@@ -196,7 +196,7 @@ class ControlThread(QtCore.QThread):
         self.update_gui.emit('-\n' % ())        #to remove this thread form the menu gui
 
 if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     main = MainWindow()
     main.show()
     sys.exit(app.exec_())

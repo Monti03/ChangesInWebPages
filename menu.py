@@ -1,9 +1,9 @@
-from PyQt4              import QtGui, QtCore
+from PyQt5              import QtGui, QtCore, QtWidgets
 
 running_threads = []
-class Menu(QtGui.QMainWindow):
+class Menu(QtWidgets.QMainWindow):
     def __init__(self, gui):
-        QtGui.QMainWindow.__init__(self)
+        QtWidgets.QMainWindow.__init__(self)
 
         self.setWindowTitle('Threads')
         self.resize(400, 100)
@@ -12,14 +12,14 @@ class Menu(QtGui.QMainWindow):
         #on this object will arrive notification from main gui
         gui.main_gui_notification_to_menu.connect(self._update_gui)
 
-        cWidget = QtGui.QWidget(self)
+        cWidget = QtWidgets.QWidget(self)
 
-        grid = QtGui.QGridLayout(cWidget)
+        grid = QtWidgets.QGridLayout(cWidget)
 
         #labels
-        url = QtGui.QLabel("urls",cWidget)
-        time = QtGui.QLabel("mins", cWidget)
-        last = QtGui.QLabel("last check", cWidget)
+        url = QtWidgets.QLabel("urls",cWidget)
+        time = QtWidgets.QLabel("mins", cWidget)
+        last = QtWidgets.QLabel("last check", cWidget)
 
         #adding labels to the grid
         grid.addWidget(url,     0, 0)
@@ -34,11 +34,11 @@ class Menu(QtGui.QMainWindow):
                 t.update_gui.connect(self._update_gui)
                 tpl[1] = True
 
-            url = QtGui.QLabel(t._url, cWidget)
-            time = QtGui.QLabel(str(t._mins), cWidget)
-            last = QtGui.QLabel(str(t._last_check), cWidget)
+            url = QtWidgets.QLabel(t._url, cWidget)
+            time = QtWidgets.QLabel(str(t._mins), cWidget)
+            last = QtWidgets.QLabel(str(t._last_check), cWidget)
 
-            button = QtGui.QPushButton("STOP", self)
+            button = QtWidgets.QPushButton("STOP", self)
             button.clicked.connect(self._make_pressed(t))
 
             grid.addWidget(url,     i, 0)
