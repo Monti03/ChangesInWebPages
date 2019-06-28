@@ -102,7 +102,7 @@ class MainWindow(QtGui.QMainWindow):
 
     #start a new thread that controls url
     def _start(self):
-        if(self._url.text() != '' and self._controll()):
+        if(self._url.text() != '' and self._control()):
 
             tmp_url = self._url.text()
             if("http://" not in tmp_url):
@@ -113,7 +113,7 @@ class MainWindow(QtGui.QMainWindow):
                 QtGui.QMessageBox.information(self, 'Problem!',"The url you insert is not valid")
                 return
             
-            th = ControllThread(self._url.text(), self._mins.value(), self._check_box.isChecked(), self)
+            th = ControlThread(self._url.text(), self._mins.value(), self._check_box.isChecked(), self)
             th.changed.connect(self._on_change)
             th.start()
             running_threads.append([th, False])
@@ -124,8 +124,8 @@ class MainWindow(QtGui.QMainWindow):
     def _on_change(self, url):
         QtGui.QMessageBox.information(self, 'Has changed!',"this url:{} has changed".format(self._url.text()))
 
-    #function that controls data before start a new ControllThread
-    def _controll(self):
+    #function that controls data before start a new ControlThread
+    def _control(self):
         if(not self._check_box.isChecked()):
             return True
 
@@ -142,7 +142,7 @@ class MainWindow(QtGui.QMainWindow):
             return True
 
 #thread class that controls urls
-class ControllThread(QtCore.QThread):
+class ControlThread(QtCore.QThread):
 
     #signal object to notify menu gui and main gui
     changed = QtCore.pyqtSignal(object)
