@@ -1,4 +1,6 @@
 # ChangesInWebPages
+---
+# Notify is no longer working so you can only have notification on your pc
 
 ## Get a notification when a web page changes
 you can control changes in web pages and get a notification on your android phone via Notify: https://play.google.com/store/apps/details?id=com.kevinbedi.notify
