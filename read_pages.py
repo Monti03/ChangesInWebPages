@@ -4,6 +4,8 @@ import time
 import datetime
 
 
+
+
 def read(url):
     
     html = urllib.request.urlopen(url).read()

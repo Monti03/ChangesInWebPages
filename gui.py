@@ -105,12 +105,12 @@ class MainWindow(QtWidgets.QMainWindow):
         if(self._url.text() != '' and self._control()):
 
             tmp_url = self._url.text()
-            if("http://" not in tmp_url):
+            if("http://" not in tmp_url and "https://" not in tmp_url):
                 self._url.setText("http://{}".format(tmp_url))
 
             print(self._url.text())
             if(not check_url(self._url.text())):
-                QtGui.QMessageBox.information(self, 'Problem!',"The url you insert is not valid")
+                QtWidgets.QMessageBox.information(self, 'Problem!',"The url you insert is not valid")
                 return
             
             th = ControlThread(self._url.text(), self._mins.value(), self._check_box.isChecked(), self)
@@ -118,11 +118,11 @@ class MainWindow(QtWidgets.QMainWindow):
             th.start()
             running_threads.append([th, False])
             self._url.setText("")
-            QtGui.QMessageBox.information(self, "Started" ,START_NOTIFICATION.format(self._url.text(), str(self._mins.value())))
+            QtWidgets.QMessageBox.information(self, "Started" ,START_NOTIFICATION.format(self._url.text(), str(self._mins.value())))
             
     #function that is executed by the Gui thread when a ControlThread calls self.update_gui.emit('-\n' % ())
     def _on_change(self, url):
-        QtGui.QMessageBox.information(self, 'Has changed!',"this url:{} has changed".format(self._url.text()))
+        QtWidgets.QMessageBox.information(self, 'Has changed!',"this url:{} has changed".format(self._url.text()))
 
     #function that controls data before start a new ControlThread
     def _control(self):
@@ -134,7 +134,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if(os.path.exists(os.environ["HOME"]+"/.notifyreg")):
                 return True
             else:
-                QtGui.QMessageBox.information(self, 'Problem!',"if you whant notification on the phone you must set notification token")
+                QtWidgets.QMessageBox.information(self, 'Problem!',"if you whant notification on the phone you must set notification token")
                 return False
         else:
             #registers user notify_token

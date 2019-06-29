@@ -60,13 +60,13 @@ class Menu(QtWidgets.QMainWindow):
     #update of the menu gui -> new thread or new last_check
     def _update_gui(self):
         print("Update Menu Gui")
-        cWidget = QtGui.QWidget(self)
+        cWidget = QtWidgets.QWidget(self)
 
-        new_grid = QtGui.QGridLayout(cWidget)
+        new_grid = QtWidgets.QGridLayout(cWidget)
 
-        url = QtGui.QLabel("urls", cWidget)
-        time = QtGui.QLabel("mins", cWidget)
-        last = QtGui.QLabel("last check", cWidget)
+        url = QtWidgets.QLabel("urls", cWidget)
+        time = QtWidgets.QLabel("mins", cWidget)
+        last = QtWidgets.QLabel("last check", cWidget)
         
 
         new_grid.addWidget(url,     0, 0)
@@ -81,10 +81,10 @@ class Menu(QtWidgets.QMainWindow):
                 t.update_gui.connect(self._update_gui)
                 tpl[1] = True
 
-            url = QtGui.QLabel(t._url, cWidget)
-            time = QtGui.QLabel(str(t._mins), cWidget)
-            last = QtGui.QLabel(str(t._last_check), cWidget)
-            button = QtGui.QPushButton("STOP", self)
+            url = QtWidgets.QLabel(t._url, cWidget)
+            time = QtWidgets.QLabel(str(t._mins), cWidget)
+            last = QtWidgets.QLabel(str(t._last_check), cWidget)
+            button = QtWidgets.QPushButton("STOP", self)
             button.clicked.connect(self._make_pressed(t))
 
             new_grid.addWidget(url,     i, 0)
