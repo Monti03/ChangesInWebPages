@@ -1,4 +1,4 @@
-echo "pyqt4"
+echo "pyqt5"
 apt-get install python3-pyqt5 
 echo "\nbeautifulsoup4"
 pip3 install beautifulsoup4

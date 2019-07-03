@@ -7,7 +7,7 @@ you can control changes in web pages and get a notification on your android phon
 
 ## Installation and requirements
 ```bash
-  sudo apt-get install python3-pyqt4
+  sudo apt-get install python3-pyqt5
 
   pip3 install BeautifulSoup4 || pip3 install beautifulsoup4 || pip3 install bs4
 
