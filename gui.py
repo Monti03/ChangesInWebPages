@@ -122,7 +122,7 @@ class MainWindow(QtWidgets.QMainWindow):
             
     #function that is executed by the Gui thread when a ControlThread calls self.update_gui.emit('-\n' % ())
     def _on_change(self, url):
-        QtWidgets.QMessageBox.information(self, 'Has changed!',"this url:{} has changed".format(url)
+        QtWidgets.QMessageBox.information(self, 'Has changed!',"this url:{} has changed".format(url))
 
     #function that controls data before start a new ControlThread
     def _control(self):
