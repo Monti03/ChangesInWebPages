@@ -18,8 +18,7 @@ you can control changes in web pages and get a notification on your android phon
 ```
 
 ## Usage
-  To start:
-  ```python3 gui.py```
+  To start just run: `./gui.py`
   
 ## Gui
   
