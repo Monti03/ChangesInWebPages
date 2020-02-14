@@ -23,6 +23,7 @@ def read(url):
 def check_url(url):
     try:    
         html = urllib.request.urlopen(url).read()
-    except:
+    except Exception as e:
+        print(e)
         return False
     return True

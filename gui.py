@@ -131,7 +131,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if(self._notify_token.text() == '' and self._check_box.isChecked()):
             print(os.environ["HOME"])
-            if(os.path.exists(os.environ["HOME"]+"/.notifyreg")):
+            if(os.path.exists("./.device_id")):
                 return True
             else:
                 QtWidgets.QMessageBox.information(self, 'Problem!',"if you whant notification on the phone you must set notification token")
