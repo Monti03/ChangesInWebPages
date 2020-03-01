@@ -7,13 +7,9 @@ you can control changes in web pages and get a notification on your android phon
 <p align="center">
   <img src= "./media/Notification_example.jpg" width="144px" height="256px">
 
-## Installation and requirements
+## Dependencies installation
 ```bash
-  sudo apt-get install python3-pyqt5
-
-  pip3 install BeautifulSoup4 || pip3 install beautifulsoup4 || pip3 install bs4
-
-  pip install lxml
+$ pip install -r requirements.txt
 ```
 
 ## Usage
@@ -31,3 +27,11 @@ you can control changes in web pages and get a notification on your android phon
   - Notification  -> check if you whant to have the notification on the phone
   
   - Slider        -> inspection period (minutes)
+
+## Development 
+
+Development environment can be easily set up thanks to provided `Pipfile` with `pipenv`
+
+```bash
+$ pipenv install
+```
