@@ -27,3 +27,11 @@ $ pip install -r requirements.txt
   - Notification  -> check if you whant to have the notification on the phone
   
   - Slider        -> inspection period (minutes)
+
+## Development 
+
+Development environment can be easily set up thanks to provided `Pipfile` with `pipenv`
+
+```bash
+$ pipenv install
+```
