@@ -66,4 +66,3 @@ class PhoneNotification(Notification):
 if __name__ == '__main__':
     SystemNotification().trigger()
     WindowNotification().trigger()
-    PhoneNotification('EmUXaAu').trigger()
