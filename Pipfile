@@ -8,7 +8,11 @@ verify_ssl = true
 [packages]
 beautifulsoup4 = "*"
 lxml = "*"
+pydbus = "*"
 PyQt5 = "*"
+gobject = "*"
+requests = "*"
+PyGObject = "*"
 
 [requires]
 python_version = "3.8"
