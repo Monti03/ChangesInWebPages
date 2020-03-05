@@ -5,6 +5,27 @@ import requests
 
 NOTIFY_URL = 'https://us-central1-notify-15448.cloudfunctions.net/sendNotification?to={}&text={}&title={}'
 
+#
+# definition of the constants uniquely associated to a notification type. Each one must be a power of 2
+# 
+
+SYSTEM_NOTIFICATION = 1
+WINDOW_NOTIFICATION = 2
+PHONE_NOTIFICATION = 4
+
+# 
+# definition of the primitives used to unmask each notification type
+# 
+
+def is_system_notification(notifications: int) -> bool:
+    return (notifications & SYSTEM_NOTIFICATION) != 0
+
+def is_window_notification(notifications: int) -> bool:
+    return (notifications & WINDOW_NOTIFICATION) != 0
+
+def is_phone_notification(notifications: int) -> bool:
+    return (notifications & PHONE_NOTIFICATION) != 0
+
 
 class Notification(ABC):
     """

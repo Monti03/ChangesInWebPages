@@ -1,7 +1,7 @@
 from .notification import *
-import threading
 import requests
 import logging 
+import threading
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -33,6 +33,7 @@ class PageWatcher():
         """
         self.running_timer = threading.Timer(self.check_time, self.__timer_expired)
         self.running_timer.start()
+        
         logger.info("Starting timer")
 
     def stop(self) -> None:
@@ -68,7 +69,7 @@ class PageWatcher():
         logger.info("Added new notification")
 
 if __name__ == "__main__":
-    pw = PageWatcher("https://www.lefrecce.it/B2CWeb/search.do?parameter=searchOutputViewer&cFID=vuSMsu0W2cW4", 1)
+    url = 'https://www.lefrecce.it/B2CWeb/search.do?parameter=searchOutputViewer&cFID=XDgjk50ni8Mp'
+    pw = PageWatcher(url, 1)
     pw.add_notification(SystemNotification())
     pw.start()
-    pw.stop()
