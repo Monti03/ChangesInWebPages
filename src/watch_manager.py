@@ -11,6 +11,7 @@ class WatchManager():
        <method name='start_watching'>
           <arg type='s' name='url' direction='in'/>
           <arg type='d' name='check_time' direction='in'/>
+          <arg type='i' name='notifications' direction='in'/>
         </method>
         <method name='stop_watching'>
           <arg type='i' name='id' direction='in'/>
