@@ -8,7 +8,7 @@ NOTIFY_URL = 'https://us-central1-notify-15448.cloudfunctions.net/sendNotificati
 #
 # definition of the constants uniquely associated to a notification type. Each one must be a power of 2
 # 
-
+NO_NOTIFICATION = 0 
 SYSTEM_NOTIFICATION = 1
 WINDOW_NOTIFICATION = 2
 PHONE_NOTIFICATION = 4
