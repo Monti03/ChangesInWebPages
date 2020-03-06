@@ -33,7 +33,7 @@ class WatchManager():
         
         self.watcher_id = 0
         self.watchers = {}
-        self.token = -1 
+        self.token = "" 
 
     def set_token(self, token:str) -> None:
         self.token = token
