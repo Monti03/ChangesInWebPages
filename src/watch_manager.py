@@ -57,7 +57,7 @@ class WatchManager():
             watcher.add_notification(SystemNotification())
         if is_window_notification(notifications):
             watcher.add_notification(WindowNotification())
-        if is_phone_notification(notifications) and self.token > 0:
+        if is_phone_notification(notifications) and self.token != "":
             watcher.add_notification(PhoneNotification(self.token))
 
         watcher.start()
