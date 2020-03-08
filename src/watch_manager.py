@@ -36,6 +36,7 @@ class WatchManager():
         self.token = "" 
 
     def set_token(self, token:str) -> None:
+        logger.info("New token: " + token)
         self.token = token
 
     def get_token(self) -> str:
