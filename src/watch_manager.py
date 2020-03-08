@@ -52,13 +52,15 @@ class WatchManager():
         
         self.watchers[self.watcher_id] = watcher
         self.watcher_id += 1
+    
+        text = "{} just changed!".format(url)
 
         if is_system_notification(notifications):
-            watcher.add_notification(SystemNotification())
+            watcher.add_notification(SystemNotification(text=text))
         if is_window_notification(notifications):
-            watcher.add_notification(WindowNotification())
+            watcher.add_notification(WindowNotification(text=text))
         if is_phone_notification(notifications) and self.token != "":
-            watcher.add_notification(PhoneNotification(self.token))
+            watcher.add_notification(PhoneNotification(self.token, text=text))
 
         watcher.start()
         logger.info("New watcher created for " + url)
