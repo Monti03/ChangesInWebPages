@@ -70,9 +70,8 @@ class WindowNotification(Notification):
         """
         Open a new window with for the notification
         """
-        # create a QApplication and a QMainWindow, which are needed to open a dialog window
-        app = QtWidgets.QApplication([])
-        QtWidgets.QMessageBox.information(QtWidgets.QMainWindow(), self.title, self.text)
+        # TODO: send a signal which is received by the gui client
+        pass
 
 
 class PhoneNotification(Notification):
