@@ -17,7 +17,7 @@ class WatchManager():
           <arg type='i' name='id' direction='in'/>
         </method>
         <method name='list_watchers'>
-          <arg type='a{i(si)}' name='l' direction='out'/>
+          <arg type='a(isi)' name='l' direction='out'/>
         </method>
         <method name='get_token'>
           <arg type='s' name='token' direction='out'/>
@@ -81,7 +81,7 @@ class WatchManager():
         # update the list by removing the watchers which did end
         self.watchers = { k: v for k, v in self.watchers.items() if not v.changed() }
 
-        return {k: (v.url, v.check_time) for k, v in self.watchers.items()}
+        return [ [k, v.url, v.check_time] for k, v in self.watchers.items() ]
 
 
 if __name__ == "__main__":

@@ -3,6 +3,7 @@ from src import notification as notifications_module
 import pydbus
 import argparse
 import sys
+import tabulate
 
 DESCRIPTION='A commmand line interface for ChangesInWebPages'
 
@@ -57,7 +58,7 @@ if parsed_args.command == "start":
 elif parsed_args.command == "stop":
     watch_manager.stop_watching(parsed_args.wid)
 elif parsed_args.command == "list":
-    print(watch_manager.list_watchers())
+    print(tabulate.tabulate(watch_manager.list_watchers(), headers=["ID", "url", "check_time"]))
 elif parsed_args.command == "set":
     if parsed_args.token is not None:
         watch_manager.set_token(parsed_args.token)

@@ -13,6 +13,7 @@ PyQt5 = "*"
 gobject = "*"
 requests = "*"
 PyGObject = "*"
+tabulate = "*"
 
 [requires]
 python_version = "3.8"
