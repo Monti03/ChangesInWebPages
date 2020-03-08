@@ -78,6 +78,9 @@ class WatchManager():
         """
         Returns a list of the running watcher with their id
         """
+        # update the list by removing the watchers which did end
+        self.watchers = { k: v for k, v in self.watchers.items() if not v.changed() }
+
         return {k: (v.url, v.check_time) for k, v in self.watchers.items()}
 
 

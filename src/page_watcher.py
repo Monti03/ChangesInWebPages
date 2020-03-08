@@ -68,6 +68,18 @@ class PageWatcher():
         self.notifications.append(notification)
         logger.info("Added new notification")
 
+    def changed(self) -> bool:
+        """
+        :return True if the page changed, False otherwise
+        """
+
+        if self.running_timer is not None:
+            logger.info("Page %s changed: %r", self.url, not self.running_timer.is_alive())
+            return not self.running_timer.is_alive()
+        else:
+            logger.info("Page %s changed: False", self.url)
+            return False
+
 if __name__ == "__main__":
     url = 'https://www.lefrecce.it/B2CWeb/search.do?parameter=searchOutputViewer&cFID=XDgjk50ni8Mp'
     pw = PageWatcher(url, 1)
