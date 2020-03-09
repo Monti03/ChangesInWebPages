@@ -10,10 +10,22 @@ from notification       import sign
 from menu               import Menu
 from menu               import running_threads
 
-import time
 import datetime
+import time
 import sys
 import os
+
+PLATFORM_NAME=''
+import platform
+if(platform.system() == 'Linux'):
+    PLATFORM_NAME = 'Linux'
+    import gi.repository
+    gi.require_version('Notify', '0.7') 
+    from gi.repository import Notify
+    Notify.init("Changes In Web Pages")
+else:
+    PLATFORM_NAME = 'Darwin'
+    import pync
 
 START_NOTIFICATION = "Now I'm controlling {} each {} minutes.\nIf you whant to stop it go to Menu->Thread or CTRL+M"
 
@@ -122,6 +134,10 @@ class MainWindow(QtWidgets.QMainWindow):
             
     #function that is executed by the Gui thread when a ControlThread calls self.update_gui.emit('-\n' % ())
     def _on_change(self, url):
+        if(PLATFORM_NAME == 'Linux'):
+            Notify.Notification.new("This url:{} has changed".format(url)).show()
+        else:
+            pync.notify("This url:{} has changed".format(url), title='Has changed!', open=str(url).rstrip())
         QtWidgets.QMessageBox.information(self, 'Has changed!',"this url:{} has changed".format(url))
 
     #function that controls data before start a new ControlThread
@@ -162,13 +178,20 @@ class ControlThread(QtCore.QThread):
         condition = True
         i = 0
         while(condition):
-            condition = text == read(self._url)
+            checked = True 
+            try:
+                condition = text == read(self._url)
+            except Exception as e:
+                print(e)
+                checked = False
+            
             if(not condition):
                 break
             time.sleep(self._mins*60)
             if(not self._flag):
                 return
-            self._last_check = time.strftime("%H:%M:%S",time.localtime())
+            if(checked):
+                self._last_check = time.strftime("%H:%M:%S",time.localtime())
 
             self.update_gui.emit('-\n' % ())    #menu gui update -> is updated _last_check
 
