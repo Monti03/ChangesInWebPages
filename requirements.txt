@@ -1,4 +1,6 @@
 beautifulsoup4
 lxml
 PyQt5
-pync
+pydbus
+requests
+tabulate

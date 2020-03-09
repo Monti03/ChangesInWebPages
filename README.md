@@ -28,6 +28,16 @@ $ pip install -r requirements.txt
   
   - Slider        -> inspection period (minutes)
 
+## Command line 
+
+You can also choose to start a daemon running in the background with 
+
+```
+$ python cwpd.py
+```
+
+and contact it through `cwp-cli.py` (all available command can be listed with `-h`)
+
 ## Development 
 
 Development environment can be easily set up thanks to provided `Pipfile` with `pipenv`
