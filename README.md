@@ -7,13 +7,14 @@ you can control changes in web pages and get a notification on your android phon
 <p align="center">
   <img src= "./media/Notification_example.jpg" width="144px" height="256px">
 
-## Dependencies installation
-```bash
-$ pip install -r requirements.txt
-```
+## Installation
+
+If not already present install `sed`; then run `install.sh`.
 
 ## Usage
-  To start just run: `python3 gui.py`
+- To start the graphical interface just run: `cwp`
+- To use the command line interface run `cwp-cli` (all available commands can be listed with `-h`)
+
   
 ## Gui
 
@@ -27,16 +28,6 @@ $ pip install -r requirements.txt
   - Notification  -> check if you whant to have the notification on the phone
   
   - Slider        -> inspection period (minutes)
-
-## Command line 
-
-You can also choose to start a daemon running in the background with 
-
-```
-$ python cwpd.py
-```
-
-and contact it through `cwp-cli.py` (all available command can be listed with `-h`)
 
 ## Development 
 

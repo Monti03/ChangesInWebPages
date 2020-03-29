@@ -1,0 +1,15 @@
+[Unit]
+Description=The ChangesInWebPages daemon
+Documentation="https://github.com/Monti03/ChangesInWebPages"
+After=default.target
+
+[Service]
+Type=dbus
+BusName=org.github.changesinwebpages
+ExecStart=__CWPD_LOC__/cwpd.py
+WorkingDirectory=__CWPD_LOC__
+RestartSec=100
+Restart=always
+
+[Install]
+WantedBy=default.target
