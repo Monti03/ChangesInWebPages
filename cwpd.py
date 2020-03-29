@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import pydbus
 import logging
 import sys

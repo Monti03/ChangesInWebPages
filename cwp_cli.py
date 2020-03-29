@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from src.dbus import *
 from src import notification as notifications_module
 import pydbus
